@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<div id="template"></div>
+<input type="checkbox" name="c" class="ck">
+<input type="checkbox" name="c" class="ck">
+<input type="checkbox" name="c" class="ck">
+<script type="text/javascript">
+	var a = new Array();
+	for(let i = 0;i<10;i++){
+		a[i] = function(){
+			console.log(i);
+		}
+	}
+	a[6]();//i为var定义时输出10 / i为let定义时输出6
+
+// 1、使用闭包实现点击多选按钮输出相应的i 也可以选择将var i变成let i
+	function iterator(i){
+		var onclick = function(e){
+			console.log(i);
+		}
+		return onclick;
+
+	}
+	var c = document.querySelectorAll(".ck");
+	for(var i = 0;i<c.length;i++){
+		c[i].onclick = iterator(i);
+	}
+class Animal{
+	constructor(){
+		this.type = "Animal"
+	}
+}
+// 2、继承 class
+class Animal{
+	// 构造方法 里边的属性和方法属于实例对象的
+	constructor(){
+		this.type = "Animal"
+	}
+	says(say){
+		// 一种方法 this指向问题 this.type获取不到
+		// var self = this;
+		// setTimeout(function(){
+		// 	console.log(self.type + " say " + say)
+		// },1000)
+		// 第二种方法
+		// setTimeout(function(){
+		//  	console.log(this.type + " say " + say)
+		// }.bind(this),1000)
+		// 第三种方法 ES6箭头函数 内部的this对象就是外部的this对象
+		setTimeout(() => {
+			console.log(this.type + " say " + say)
+		},1000)
+
+	}
+}
+let cat = new Animal();
+cat.says("miao");
+// 继承 extends
+class Dog extends Animal{
+	constructor(){
+		// 指代父类的实例 继承父类的this对象
+		// 先创建父类的实例对象this 子类再使用构造函数修改this
+		super();// 必须要有
+		this.type = "dog"
+	}
+}
+let dog = new Dog();
+dog.says("wang");
+
+// 3、使用反引号添加标签内容 ${}引用变量
+var template = document.getElementById("template");
+var content = {
+	name:"template",
+	feature:"convenience"
+}
+var p = document.createElement("p");
+p.setAttribute("id","templatep");
+template.appendChild(p);
+p.append(`
+	this is ${content.name}
+	`);
+
+// 4、default 未传递参数时 默认 rest
+function deTest(type = 'test'){
+	// this.type = type || "test";
+	console.log(type);
+}
+deTest();
+function animals(...types){
+    console.log(types)
+}
+animals('cat', 'dog', 'fish','pig')
+</script>
+</body>
+</html>
